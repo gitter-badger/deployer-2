@@ -58,7 +58,6 @@ class TestServerConnection extends Job implements SelfHandling, ShouldQueue
                 if (preg_match('/(tty present|askpass)/', $process->getErrorOutput())) {
                     $this->server->status = Server::FAILED_FPM;
                 }
-
             } else {
                 $this->server->status = Server::SUCCESSFUL;
             }

@@ -22,7 +22,9 @@ use Symfony\Component\Process\Process;
 /**
  * Deploys an actual project.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * TODO: if failed to restart php-fpm
  * TODO: rewrite this as it is doing way too much and is very messy now.
+ * TODO: if the connection to the server failed or succeeded we should update the server status
  */
 class DeployProject extends Job implements SelfHandling, ShouldQueue
 {
@@ -383,6 +385,7 @@ CMD;
                 sprintf('cd %s', $root_dir),
                 sprintf('[ -h %s/latest ] && rm %s/latest', $root_dir, $root_dir),
                 sprintf('ln -s %s %s/latest', $latest_release_dir, $root_dir),
+                sprintf('[ ! -z "$(ps -ef | grep -v grep | grep php-fpm)" ] && sudo /usr/sbin/service php5-fpm restart'),
             ];
         } elseif ($step->stage === Stage::DO_PURGE) {
             // Purge old releases
