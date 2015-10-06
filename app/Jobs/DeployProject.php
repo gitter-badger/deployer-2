@@ -448,7 +448,7 @@ CMD;
             $user = $server->user;
         }
 
-        if (env('APP_DEBUG')) {
+        if (env('APP_DEBUG', false)) {
             // Turn on verbose output so we can see all commands when in debug mode
             $script = 'set -v' . PHP_EOL . $script;
         }

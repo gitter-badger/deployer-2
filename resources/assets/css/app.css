@@ -1,4 +1,4 @@
-#log pre { 
+#log pre {
     max-height: 300px;
     overflow: auto;
 }
@@ -69,7 +69,7 @@ input[type=text].deployment-source {
 }
 
 #command_script,
-#project-file-content { 
+#project-file-content {
     height: 250px;
 }
 
@@ -80,7 +80,7 @@ input[type=text].deployment-source {
     overflow-y: scroll;
 }
 
-#repository_error {
+#repository_error, #fpm_error {
     display: none;
 }
 

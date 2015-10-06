@@ -5,6 +5,7 @@ var app = app || {};
     var UNTESTED   = 1;
     var FAILED     = 2;
     var TESTING    = 3;
+    var FAILED_FPM = 4;
 
     $('#server_list table').sortable({
         containerSelector: 'table',
@@ -20,7 +21,7 @@ var app = app || {};
                 ids.push($(element).data('server-id'));
             });
 
-            $.ajax({ 
+            $.ajax({
                 url: '/servers/reorder',
                 method: 'POST',
                 data: {
@@ -231,7 +232,7 @@ var app = app || {};
         },
         addOne: function (server) {
 
-            var view = new app.ServerView({ 
+            var view = new app.ServerView({
                 model: server
             });
 
@@ -270,10 +271,15 @@ var app = app || {};
                 data.status_css = 'warning';
                 data.icon_css   = 'spinner fa-pulse';
                 data.status     = Lang.servers.status.testing;
-            } else if (parseInt(this.model.get('status')) === FAILED) {
+            } else if (parseInt(this.model.get('status')) === FAILED || parseInt(this.model.get('status')) === FAILED_FPM) {
                 data.status_css = 'danger';
                 data.icon_css   = 'warning';
                 data.status     = Lang.servers.status.failed;
+
+                if (parseInt(this.model.get('status')) === FAILED_FPM) {
+                    $('#fpm_error').show();
+                    $('#fpm_error #server_user').text(this.model.get('user'));
+                }
             }
 
             this.$el.html(this.template(data));
@@ -295,6 +301,8 @@ var app = app || {};
             if (parseInt(this.model.get('status')) === TESTING) {
                 return;
             }
+
+            $('#fpm_error').hide();
 
             this.model.set({
                 status: TESTING

@@ -46,13 +46,19 @@ class TestServerConnection extends Job implements SelfHandling, ShouldQueue
         file_put_contents($key, $this->server->project->private_key);
 
         try {
-            $command = $this->sshCommand($this->server, $key, 'ls');
+            $command = $this->sshCommand($this->server, $key);
             $process = new Process($command);
             $process->setTimeout(null);
             $process->run();
 
             if (!$process->isSuccessful()) {
                 $this->server->status = Server::FAILED;
+
+                // TODO: See if there are other strings which are needed
+                if (preg_match('/(tty present|askpass)/', $process->getErrorOutput())) {
+                    $this->server->status = Server::FAILED_FPM;
+                }
+
             } else {
                 $this->server->status = Server::SUCCESSFUL;
             }
@@ -72,9 +78,15 @@ class TestServerConnection extends Job implements SelfHandling, ShouldQueue
      * @param  string $script The script to run
      * @return string
      */
-    private function sshCommand(Server $server, $private_key, $script)
+    private function sshCommand(Server $server, $private_key)
     {
-        $script = 'set -e' . PHP_EOL . $script;
+        $script = <<< EOF
+            set -e
+            ls
+            if [ ! -z "$(ps -ef | grep -v grep | grep php-fpm)" ]; then
+                sudo /usr/sbin/service php5-fpm restart
+            fi
+EOF;
 
         return 'ssh -o CheckHostIP=no \
                  -o IdentitiesOnly=yes \
