@@ -55,7 +55,7 @@ class TestServerConnection extends Job implements SelfHandling, ShouldQueue
                 $this->server->status = Server::FAILED;
 
                 // TODO: See if there are other strings which are needed
-                if (preg_match('/(tty present|askpass)/', $process->getErrorOutput())) {
+                if (preg_match('/(no tty present|askpass)/', $process->getErrorOutput())) {
                     $this->server->status = Server::FAILED_FPM;
                 }
             } else {
