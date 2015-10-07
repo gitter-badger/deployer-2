@@ -18,6 +18,7 @@ use REBELinBLUE\Deployer\Server;
 use REBELinBLUE\Deployer\ServerLog;
 use REBELinBLUE\Deployer\User;
 use Symfony\Component\Process\Process;
+use Jack\Symfony\ProcessManager;
 
 /**
  * Deploys an actual project.
@@ -241,6 +242,50 @@ CMD;
      */
     private function runStep(DeployStep $step)
     {
+        $manager = new ProcessManager;
+
+        $processes = [];
+
+        foreach ($step->servers as $log) {
+
+            $server = $log->server;
+            $script = $this->getScript($step, $server);
+
+            $user = $server->user;
+            if (isset($step->command)) {
+                $user = $step->command->user;
+            }
+
+            if (!empty($script)) {
+                $process = new Process($this->sshCommand($server, $script, $user));
+                $process->setTimeout(null);
+
+                // $output = '';
+                // $process->run(function ($type, $output_line) use (&$output, &$log) {
+                //     // if ($type === Process::ERR) {
+                //     //     $output .= $this->logError($output_line);
+                //     // } else {
+                //     //     $output .= $this->logSuccess($output_line);
+                //     // }
+
+                // });
+
+                // if (!$process->isSuccessful()) {
+                //     $failed = true;
+                // }
+
+                // $log->output = $output;
+
+                $processes[] = $process;
+
+            }
+        }
+
+        $manager->runParallel($processes, count($processes), 1000);
+
+
+        return;
+
         foreach ($step->servers as $log) {
             $log->status     = ServerLog::RUNNING;
             $log->started_at = date('Y-m-d H:i:s');
