@@ -247,7 +247,6 @@ CMD;
         $processes = [];
 
         foreach ($step->servers as $log) {
-
             $server = $log->server;
             $script = $this->getScript($step, $server);
 
@@ -277,12 +276,10 @@ CMD;
                 // $log->output = $output;
 
                 $processes[] = $process;
-
             }
         }
 
         $manager->runParallel($processes, count($processes), 1000);
-
 
         return;
 
