@@ -63,6 +63,8 @@ class InstallApp extends Command
             return;
         }
 
+        $this->clearCaches();
+
         // TODO: Add options so they can be passed in via the command line?
 
         $config = base_path('.env');
@@ -97,9 +99,10 @@ class InstallApp extends Command
 
         $this->generateKey();
         $this->migrate(($this->getLaravel()->environment() === 'local'));
-        $this->optimize();
 
         $this->repository->updateById($admin, 1);
+
+        $this->optimize();
 
         $this->line('');
         $this->info('Success! Deployer is now installed');

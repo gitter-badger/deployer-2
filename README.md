@@ -65,7 +65,7 @@ The `master` branch of this repository is a development branch and **should not*
 2. Checkout the latest release
 
     ```shell
-    $ git checkout 0.0.19
+    $ git checkout 0.0.21
     ```
 
 3. Install dependencies
@@ -93,13 +93,14 @@ The `master` branch of this repository is a development branch and **should not*
 
     ```shell
     $ git fetch --all
-    $ git checkout 0.0.19
+    $ git checkout 0.0.21
      ```
 
 2. Update the dependencies
 
     ```shell
     $ composer install -o --no-dev
+    $ npm install --production
     ```
 
 3. Run the updater
