@@ -25,6 +25,7 @@ use Symfony\Component\Process\Process;
  * TODO: if failed to restart php-fpm
  * TODO: rewrite this as it is doing way too much and is very messy now.
  * TODO: if the connection to the server failed or succeeded we should update the server status
+ * TODO: id_rsa and wrapper.sh should be unique names!
  */
 class DeployProject extends Job implements SelfHandling, ShouldQueue
 {
