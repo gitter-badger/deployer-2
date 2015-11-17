@@ -14,6 +14,7 @@
                         <i class="icon fa fa-warning"></i> {{ Lang::get('deployments.warning') }}
                     </div>
 
+                    @if (count($branches) || count($tags))
                     <div class="form-group">
                         <label for="deployment_source">{{ Lang::get('deployments.source') }}</label>
                         <ul class="list-unstyled">
@@ -24,26 +25,31 @@
                                     </label>
                                 </div>
                             </li>
+
+                            @if (count($branches))
                             <li>
                                 <div class="radio">
                                     <label for="deployment_source_branch">
                                         <input type="radio" class="deployment-source" name="source" id="deployment_source_branch" value="branch" /> {{ Lang::get('deployments.different_branch') }}
 
                                         <select class="form-control deployment-source" name="source_branch" id="deployment_branch">
-                                            @foreach ($project->branches() as $branch)
+                                            @foreach ($branches as $branch)
                                                 <option value="{{ $branch }}">{{ $branch }}</option>
                                             @endforeach
                                         </select>
                                     </label>
                                 </div>
                             </li>
+                            @endif
+
+                            @if (count($tags))
                             <li>
                                 <div class="radio">
                                     <label for="deployment_source_tag">
                                         <input type="radio" class="deployment-source" name="source" id="deployment_source_tag" value="tag" /> {{ Lang::get('deployments.tag') }}
 
                                         <select class="form-control deployment-source" name="source_tag" id="deployment_tag">
-                                            @foreach ($project->tags() as $tag)
+                                            @foreach ($tags as $tag)
                                                 <option value="{{ $tag }}">{{ $tag }}</option>
                                             @endforeach
                                         </select>
@@ -51,9 +57,11 @@
                                     </label>
                                 </div>
                             </li>
+                            @endif
                         </ul>
                     </div>
                     <hr />
+                    @endif
                     <div class="form-group">
                         <label for="deployment_reason">{{ Lang::get('deployments.describe_reason') }}</label>
                         <textarea rows="10" id="deployment_reason" class="form-control" name="reason" placeholder="For example, Allows users to reset their password"></textarea>
