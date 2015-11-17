@@ -109,4 +109,16 @@ abstract class ProjectRelation extends Model
     {
         return $this->hasMany('REBELinBLUE\Deployer\CheckUrl');
     }
+
+    /**
+     * Has many relationship for git references.
+     *
+     * @see PREBELinBLUE\Deployer\Project::tags()
+     * @see PREBELinBLUE\Deployer\Project::branches()
+     * @return Ref
+     */
+    public function refs()
+    {
+        return $this->hasMany('REBELinBLUE\Deployer\Ref');
+    }
 }
