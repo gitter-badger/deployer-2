@@ -127,7 +127,7 @@ class DeployProject extends Job implements SelfHandling, ShouldQueue
         // Use the repository rather than the project ID, so if a single repo is used in multiple projects
         // it is not duplicated
         // FIXME: Move this to another class as there is a lot more we should do here
-        $safe = preg_replace('/[^_\-.\-a-zA-Z0-9\s]/u', '_', $this->deployment->project->repository);
+        $safe      = preg_replace('/[^_\-.\-a-zA-Z0-9\s]/u', '_', $this->deployment->project->repository);
         $mirrorDir = storage_path() . '/app/' . $safe;
 
         $wrapper = tempnam(storage_path() . '/app/', 'gitssh');
@@ -161,7 +161,6 @@ CMD;
         $process->run();
 
         unlink($wrapper);
-
 
         if (!$process->isSuccessful()) {
             throw new \RuntimeException('Could not get repository info - ' . $process->getErrorOutput());
