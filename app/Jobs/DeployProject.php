@@ -155,7 +155,7 @@ CMD;
         $mirror = tempnam(storage_path() . '/app/', 'mirror');
         file_put_contents($mirror, $script);
 
-        $process = new Process("chmod +x {$script} && {$script}");
+        $process = new Process("chmod +x {$mirror} && {$mirror}");
         $process->setTimeout(null);
         $process->run();
 
