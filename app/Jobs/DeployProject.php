@@ -354,7 +354,6 @@ CMD;
         $commands = false;
 
         if ($step->stage === Stage::DO_CLONE) {
-
             $this->sendFile($this->release_archive, $remote_archive, $server, $log);
 
             $commands = [
@@ -538,7 +537,6 @@ OUT;
             $remote_file
         );
 
-
         $process = new Process($copy);
         $process->setTimeout(null);
         ///$process->run();
@@ -548,8 +546,7 @@ OUT;
             if ($type === Process::ERR) {
                 $output .= $this->logError($output_line);
             } else {
-                $tokens = array('received' => 'sent', 'bytes  sent' => 'received');
-
+                // FIXME: Horrible hack
                 $output_line = str_replace('received', 'xxx', $output_line);
                 $output_line = str_replace('sent', 'received', $output_line);
                 $output_line = str_replace('xxx', 'sent', $output_line);
